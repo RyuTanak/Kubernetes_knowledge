@@ -1,5 +1,7 @@
 # Kubernetes学習  
 
+[参考github](https://github.com/nakamasato/kubernetes-basics/tree/v2.0)  
+
 ## Kubernetesで出てくる単語  
 
 - Desired State(理想状態)  

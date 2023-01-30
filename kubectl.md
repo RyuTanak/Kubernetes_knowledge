@@ -38,3 +38,18 @@ kubectl get [TYPE] [NAME] [flags]
 
 ![image](./image/3.png)  
 
+## リソースの詳細を表示  
+
+kubectl describe [TYPE] [NAMEPREFIX] [flags]  
+
+## リソースの作成・削除  
+
+kubectl create/delete -f FILENAME  
+
+
+
+## 出てくる単語  
+- namespace  
+  →？  
+- リソース  
+  →？  
