@@ -56,4 +56,65 @@ Podの作成＝Kubernetesオブジェクトを作成
 ![image](./image/4.png)  
 
 
+Kubernetesオブジェクトのフィールド  
+このフィールドというのは2つあり
+- spec: 理想状態(desired state)  
+  - kubectlやプログラムにより変更する  
+  - 例、kubectl apply -f pod.yaml  
+- status: 現実状態(current state)  
+  - Kubernetesにより更新される  
+
+コントロールプレーンは、理想状態と現実状態が一致するように管理  
+
+### Kubernetesオブジェクト作成に必須の情報（4つ）  
+- apiVersion: どのバージョンのKubernetes APIかを指定する  
+  例 v1  
+
+- kind: どの種類のオブジェクトか  
+  例 Pod,Deployment  
+
+- metadata: オブジェクトを一意に識別する情報  
+  例 name.,UID,namespace  
+
+- spec: 理想状態  
+  内容はオブジェクトごとに異なる  
+
+pod作成時の例  
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-yaml
+spec:
+  containers:
+    - image: nginx
+      name: nginx
+```
+
+### Namespace  
+
+リソースの一つ  
+同一の物理クラスター上で複数の仮想クラスターの動作をサポートする。  
+この「仮想クラスター」のことをNamespaceという。  
+
+仮想クラスタとは、実際には同じマシン上で動いているかもしれないが、仮想的に環境が分けられている状態  
+
+
+### 2種類のリソース：Namespace vs Cluster  
+
+- Namespace-scoped リソース：  
+  Namespaceに属しているリソースで、Namespace削除時には削除される  
+  Namespace内で名前はUniqueである必要がある   
+- Cluster-scoped リソース：
+  Namespaceに属していないリソース  
+  クラスタ全体で使われるもの  
+  クラスタ内で名前はUniqueである必要がある  
+
+### Namespaceのコントロール  
+
+- Namespaceの作成・削除  
+  kubectl create/delete namespace <Namespace名>  
+- ある特定のNamespaceのオブジェクトを操作する  
+  kubectl [command] [TYPE] --namespace <Namespace名> or -n <Namespace名>  
+
 
