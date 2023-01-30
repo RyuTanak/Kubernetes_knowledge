@@ -45,6 +45,6 @@
 - Kuberbetes Cluster  
   上のWorker NodeとControl Planeを併せてKubernetes Clusterという  
 
-- 
+
 
 
