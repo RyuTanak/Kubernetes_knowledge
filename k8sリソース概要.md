@@ -118,3 +118,20 @@ spec:
   kubectl [command] [TYPE] --namespace <Namespace名> or -n <Namespace名>  
 
 
+## ワークロードリソース  
+
+複数のPodを作成・管理するためのリソース  
+例  
+- ReplicaSet: 指定したレプリカ数のPodを常に保証する  
+など  
+
+Podテンプレート：ワークロードリソースはPodを作成するため、Podの定義書が必要。その定義書のこと  
+
+### ReplicaSet  
+
+フィールド  
+- replicas: 稼働させたいPodの数  
+- pod templates: Podを作成するときのテンプレート  
+- selector: 対象となるPodを特定するため  
+   Podテンプレート内のラベルは同じである必要がある  
+
