@@ -129,9 +129,98 @@ Podテンプレート：ワークロードリソースはPodを作成するた�
 
 ### ReplicaSet  
 
+指定したレプリカ数のPodを常に保証する。  
+
 フィールド  
 - replicas: 稼働させたいPodの数  
 - pod templates: Podを作成するときのテンプレート  
 - selector: 対象となるPodを特定するため  
    Podテンプレート内のラベルは同じである必要がある  
+
+## Deployment  
+
+ローリングアップデートやロールバックなどのアップデート機能を提供  
+主な機能  
+- ReplicaSetのロールアウト（更新）  
+- 不安定な場合の前のバージョンへロールバック  
+- スケールアップ、ダウンする（ReplicaSetのreplica数変更）  
+使用頻度：高  
+  ほとんどのアプリケーションはDeploymentで管理  
+フィールド  
+  ReplicaSetとほとんど同じ  
+
+### Deployment特有のフィールド  
+
+- strategy: 更新戦略  
+  - type:"Recreate"か"RollingUpdate"を指定  
+     デフォルトは"Rollingupdate"  
+  - RollingUpdateの場合には  
+     maxUnavailable：更新処理中に利用不可になるPodの最大数  
+     maxSurge：更新処理にいくつエクストラで追加できるPodの最大数  
+
+- revisionHistory: 過去のバージョンとしてReplaceSetを残しておく数
+    デフォルとは10  
+- paused：一時停止されているかどうか　
+- progressDeadlineSeconds: 更新プログレスの最大秒数  
+    デフォルトは600uooooooooo  
+
+### Deploymentの流れ  
+
+1. Deploymentを作成：kubectl apply -f deployment.yaml  
+2. Deploymentのオブジェクトが作成される  
+3. DeploymentコントローラがDeploymentオブジェクトを常にチェックして  
+   RepliceSetオブジェクが生成される  
+   a. ReplicaSetが作られるReplicaSetコントローラによりPodも作成される  
+4. DeploymentのImageを更新する  
+5. 新しいReplicaSetオブジェクトを作成し、古いReplicaSetのreplicasを減らし  
+   新しいReplicaSetを作成しreplicasを増やし、最終的にそれぞれ0と2にする  
+
+
+## ConfigMap（設定用リソース）  
+
+機密性のないデータをキーと値のペアで保存し、Podから参照可能  
+利点  
+  コンテナイメージと環境固有の設定を切り離す→アプリケーションがポータルになる  
+例  
+  アプリケーションの接続先DBのHOST、User、Port  
+  confファイル  
+使用方法  
+  コンテナの環境変数の設定  
+  読み取り専用のボリュームを作成し、コンテナから読み込む  
+
+
+## Secret(設定用リソース)  
+
+機密情報（パスワード、トークンなど）を保存・管理し、Podから参照可能  
+種類  
+  - Opaque  
+  - kubernetes.io/dockercfg  
+  - kubernetes.io/basic-auth など  
+例  
+  - アプリケーションへの接続パスワード  
+  - Dockerレジストリへのアクセス権限  
+使用方法  
+  - ボリューム内のファイルとして、Pod内のコンテナにマウントする  
+  - コンテナの環境変数の設定  
+  - kubeletがDockerイメージをpullする際に使用  
+
+## Service  
+
+Podの集合を抽象化して公開  
+- Podの集合に対するDNS名  
+- Podの集合に対する負荷分散  
+
+各PodはIPアドレスを持っているが、Podの作成・削除のたびに、アプリケーションのIPアドレスの集合が変化するのは大変。  
+→ServiceがDNS名を提供し、後ろにあるIPアドレスの管理をしてくれる  
+(常に同じ名前を使ってアプリケーションを参照できる)  
+
+- Serviceは対象となるPodを認識する必要がある。→セレクター  
+- Podのマッピングも可能  
+  - Service側のPortとPodのPortが異なってもOK  
+  
+
+
+
+
+
 
